@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "ayursutra-481616",
+  "private_key_id": "1665e8bdffb6b462fe55553216a3eff2929c736d",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDjbJVAcWIUwd74\ny8FSimj+DAG4/WB9tCj23z/0uG3982P7oKod1YiYsbX+MfzenA3SIVgb9TUL+W+O\nas6/NFJaFICi6uz/PU6yLBI3uB3FV6xzICc/BlU3D9HQSW5l8dnbNm4h5NplVMpW\ntbfitITEQ2OYW2FQshZ0qAsJJCSiKkrCI7m8/spufhLRMurU7tj0Tk2Z5Dwla01H\n7OGct1ljPSGBE+NOgrMBUPOI2EKkJqXZwYD8NH+CvznxAmH3TVoOBpkSy0xcqAVM\nT5oV9iMoAx+QGZQMdfKcB/44VS4s8qKtKYzjr/um0fMvKIVo3CnLQDkbF/tSjeoP\n6HYpsspPAgMBAAECggEABipaU305BC7YIIhf+dP5xUvGO8fwUG5/0jPtzaPp8ds7\noZJsYKAUDDuvhbAnCevsh5iGBUZp0gsvMvFPU8MTdncdOg11yY4I1Tvsbhx5ZiSB\nCG/3Ns/kcIUzxXQWk5nxme4V7ai0Ip1TwCai0RKrkY++iMT1biG3cFTIujTQiQet\nl09zHEuL+AofwJk9dlxuGOPEWu2szkEpbc3hNdOQMJlTSfOa+RI2cGdiFhm2DB5u\nNVFxrTRtVHdMQSsEBw02IZ6PIME7cFq4VMA+HQEP2cfwbyjAP/gBZXL4bk4DSbXR\nCET0lL2OfsQKmCU14EjCOeoYZQPd6mEwxPgHVWMZEQKBgQD8JFnBaES2DGBYADwv\nqJI9IV6Fm3EYzzCvecns4sIBAfjZK7Wh2cub+E09PscgO13xWDq91woMSPA7zWH0\n1RBmiLRT4wPhclrSnbtHrnB2CAtRTtmqwg1pedugTCqcDkaQON46Kmh3/hkFC8C3\nkGVmyG38l4IAHDunH59Q3KpPHwKBgQDm52lmUiADH6KfaFfSpRuo/Z7XRJKdv8rD\niD0QAFHu9OktiVsRXOn+nCrvHqdeDqG5vmVSA+GQ0oXSfFET+ilqXA5ellTpjjij\niQxlIQYX6o5nUbExA7YLmMMSG3pwgDup1aCDxYzYD+1IbOOsQnMWBguydmDsheKw\nBMLE/ZuO0QKBgQDuF3E95bTEZ0lur8IliruUx/bWmSKht7wUZx+a9cEWbINMpy6b\nR+sxO7XL+ITV1dlutc66Rt3xHcrj3Zv7MlqLR9loQTz/3RkQOuuG05zUh+IQBDIc\nQaOijvQqGOI/fGd7doe6SyNc828yyZdQfySRewAI/hQ/AGn/9SdelxCnJwKBgQCm\nuWcwe5Ijzz7kLTpkndU4E1ETDK90+hxVTVUR7bk7elm4CJraEaXfszGJETA2SQhb\nju+n5aeEo43/KsZ8T0CCTNAPWisbrRaWdomdp9e3gySp06HGy3AyNW5875xcCSuL\nePX6z7Tf+bgSeJV4N07UEy90/+cCQbYp9HYSOTCOUQKBgCJNra2BWoNWcjqYldRQ\nfO0YzRHy3EQ3VshILWxnTU9DBk4QzRryIKmQ5MTN5vnpIJ84LriOtxPcLKCwMBSI\n32KaSBMrbQavCkSm9KxS0jKeK+Rg9Cpsc8gWHBv+vTooOpnAf8c6Df9CSrtsHZgb\n1uHty/2abhR0mgyXn8Ng1/6f\n-----END PRIVATE KEY-----\n",
+  "client_email": "uploadimg25@ayursutra-481616.iam.gserviceaccount.com",
+  "client_id": "102123164159666525043",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/uploadimg25%40ayursutra-481616.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
