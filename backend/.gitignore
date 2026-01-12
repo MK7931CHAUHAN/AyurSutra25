@@ -38,8 +38,3 @@ Thumbs.db
 .vscode/
 .idea/
 
-# ===============================
-# Uploads (local files)
-# ===============================
-uploads/
-temp/

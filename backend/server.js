@@ -24,6 +24,7 @@ const chatbotRoutes = require('./routes/chatbotRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 /* ===================== DB ===================== */
 connectDB();
