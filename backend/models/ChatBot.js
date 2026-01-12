@@ -85,6 +85,6 @@ const conversationSchema = new mongoose.Schema({
 // Indexes for faster queries
 conversationSchema.index({ patientId: 1, createdAt: -1 });
 conversationSchema.index({ doctorId: 1, status: 1 });
-conversationSchema.index({ sessionId: 1 });
+// conversationSchema.index({ sessionId: 1 });
 
 module.exports = mongoose.model('ChatBotConversation', conversationSchema);
