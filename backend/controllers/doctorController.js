@@ -629,48 +629,6 @@ const bulkUpdateDoctors = asyncHandler(async (req, res) => {
   }
 });
 
-const uploadUserImage = asyncHandler(async (req, res) => {
-  const { doctorId } = req.params;
-
-  if (!req.file) {
-    res.status(400);
-    throw new Error("No file uploaded");
-  }
-
-  let doctor = await Doctor.findById(doctorId);
-
-  let userId;
-
-  if (doctor) {
-    userId = doctor.user; // linked User for this doctor
-  } else {
-    // fallback: maybe doctorId is actually a register-only user
-    const user = await User.findById(doctorId);
-    if (!user || user.role !== 'doctor') {
-      res.status(404);
-      throw new Error("Doctor/User not found");
-    }
-    userId = user._id;
-  }
-
-  // Upload file to Cloudinary or wherever
-  const cloudinaryUrl = req.file.path; // replace with actual Cloudinary logic
-
-  // Update only this doctor's user
-  const updatedUser = await User.findByIdAndUpdate(
-    userId,
-    { photo: cloudinaryUrl },
-    { new: true }
-  );
-
-  res.json({
-    success: true,
-    photo: updatedUser.photo,
-    cloudinaryUrl: updatedUser.photo
-  });
-});
-
-
 
 // @desc    Get doctor schedule with appointments
 // @route   GET /api/doctors/:id/schedule
@@ -937,7 +895,6 @@ module.exports = {
   updateAvailability,
   getDoctorStats,
   bulkUpdateDoctors,
-  uploadUserImage,
   getDoctorSchedule,
   exportDoctorSchedule
 };
