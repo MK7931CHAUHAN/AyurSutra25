@@ -1,10 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const mongoose = require('mongoose');
 const User = require('../models/userModels');
-const Patient = require('../models/Patient');
+const Patient = require('../models/patientModels');
 const cloudinary = require('cloudinary').v2;
 const {generatePatientCode} = require('../utils/generatePatientId');
-const fs = require('fs');
+
 
 /* ===================== STATS ===================== */
 const getPatientStats = asyncHandler(async (req, res) => {
@@ -419,25 +419,34 @@ const bulkUpdatePatients = asyncHandler(async (req, res) => {
 /* ===================== UPLOAD PHOTO ===================== */
 const uploadPatientPhoto = asyncHandler(async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ success: false, message: 'No file uploaded' });
+    return res
+      .status(400)
+      .json({ success: false, message: "No file uploaded" });
   }
 
-  const result = await cloudinary.uploader.upload(req.file.path, {
-    folder: 'patients',
-    width: 400,
-    height: 400,
-    crop: 'fill'
-  });
+  // ✅ Upload directly from buffer to Cloudinary
+  const result = await cloudinary.uploader.upload(
+    `data:${req.file.mimetype};base64,${req.file.buffer.toString("base64")}`,
+    {
+      folder: "patients",
+      width: 400,
+      height: 400,
+      crop: "fill",
+    }
+  );
 
-  fs.unlinkSync(req.file.path);
-
+  // ✅ Save Cloudinary URL only
   const user = await User.findByIdAndUpdate(
     req.params.id,
     { photo: result.secure_url },
     { new: true }
-  ).select('-password');
+  ).select("-password");
 
-  res.json({ success: true, photo: user.photo });
+  res.status(200).json({
+    success: true,
+    photo: user.photo,
+    public_id: result.public_id,
+  });
 });
 
 /* ===================== DELETE PATIENT ===================== */

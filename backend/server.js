@@ -49,6 +49,7 @@ app.use(cors({
 /* ===================== Middlewares ===================== */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 /* ===================== Routes ===================== */
 app.get("/", (req, res) => {

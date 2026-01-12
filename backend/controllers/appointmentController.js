@@ -1,9 +1,9 @@
 // controllers/appointmentController.js
 const mongoose = require('mongoose');
-const Appointment = require('../models/Appointment');
-const Patient = require('../models/Patient');
+const Appointment = require('../models/appointmentModels');
+const Patient = require('../models/patientModels');
 const User = require('../models/userModels');
-const Doctor = require('../models/Doctor');
+const Doctor = require('../models/doctorModels');
 const asyncHandler = require('express-async-handler');
 const { generateAppointmentId } = require('../utils/generatePatientId');
 

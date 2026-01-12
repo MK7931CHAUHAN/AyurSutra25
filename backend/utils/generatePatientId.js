@@ -1,6 +1,6 @@
 // utils/idGenerator.js
 
-const Counter = require('../models/Counter');
+const Counter = require('../models/counterModels');
 
 /* ======================================================
    GENERIC COUNTER HELPER (REUSABLE)

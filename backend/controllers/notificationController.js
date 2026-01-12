@@ -1,5 +1,5 @@
 const asyncHandler = require('express-async-handler');
-const Notification = require('../models/Notification');
+const Notification = require('../models/notificationModels');
 const User = require('../models/userModels');
 
 // @desc    Create a new notification

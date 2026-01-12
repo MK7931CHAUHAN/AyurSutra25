@@ -1,8 +1,8 @@
 // controllers/medicalZoneController.js
-const Patient = require('../models/Patient');
-const MedicalRecord = require('../models/MedicalRecord');
-const Appointment = require('../models/Appointment');
-const Treatment = require('../models/Treatment');
+const Patient = require('../models/patientModels');
+const MedicalRecord = require('../models/medicalRecord');
+const Appointment = require('../models/appointmentModels');
+const Treatment = require('../models/treatmentModels');
 const moment = require('moment');
 const { normalizeArrayObjects } = require('../utils/normalize');
 const mongoose = require('mongoose');

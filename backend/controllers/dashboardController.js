@@ -1,9 +1,9 @@
 // controllers/dashboardController.js
 const asyncHandler = require('express-async-handler');
-const Patient = require('../models/Patient');
-const Treatment = require('../models/Treatment');
-const Appointment = require('../models/Appointment');
-const Room = require('../models/Room'); // optional, if you track rooms
+const Patient = require('../models/patientModels');
+const Treatment = require('../models/treatmentModels');
+const Appointment = require('../models/appointmentModels');
+const Room = require('../models/roomModels'); // optional, if you track rooms
 
 const getDashboardStats = asyncHandler(async (req, res) => {
   const todayStart = new Date();

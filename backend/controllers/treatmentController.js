@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Treatment = require('../models/Treatment');
-const Patient = require('../models/Patient');
+const Treatment = require('../models/treatmentModels');
+const Patient = require('../models/patientModels');
 const User = require('../models/userModels');
-const Therapy = require('../models/Therapy');
+const Therapy = require('../models/therapyModels');
 const {generateTreatmentId} = require('../utils/generatePatientId');
 const asyncHandler = require('express-async-handler');
 

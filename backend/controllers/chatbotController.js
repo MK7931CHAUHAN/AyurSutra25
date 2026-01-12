@@ -1,7 +1,7 @@
-const ChatBotConversation = require('../models/ChatBot');
-const Medicine = require('../models/Medicine');
-const Patient = require('../models/Patient');
-const Doctor = require('../models/Doctor');
+const ChatBotConversation = require('../models/chatBotModels');
+const Medicine = require('../models/medicineModels');
+const Patient = require('../models/patientModels');
+const Doctor = require('../models/doctorModels');
 const User = require('../models/userModels');
 const natural = require('natural');       // ✅ added this line
 const TfIdf = natural.TfIdf;

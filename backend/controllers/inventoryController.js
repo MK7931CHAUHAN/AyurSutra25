@@ -1,4 +1,4 @@
-const Inventory = require('../models/Inventory');
+const Inventory = require('../models/inventoryModels');
 const asyncHandler = require('express-async-handler');
 const {generateInventoryId} = require('../utils/generatePatientId');
 // @desc    Get all inventory items

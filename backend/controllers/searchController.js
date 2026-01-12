@@ -1,6 +1,6 @@
-const Patient = require('../models/Patient');
-const Doctor = require('../models/Doctor');
-const Appointment = require('../models/Appointment');
+const Patient = require('../models/patientModels');
+const Doctor = require('../models/doctorModels');
+const Appointment = require('../models/appointmentModels');
 const User = require('../models/userModels');
 
 const searchAll = async (req, res) => {
