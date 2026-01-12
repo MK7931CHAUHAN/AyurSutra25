@@ -24,7 +24,7 @@ const upload = require("../middleware/upload");
 
 // Upload Image for Doctor Profile
 router.post(
-  '/upload-image/:doctorId',
+  '/upload-image/:patientId',
   protect,
   authorize('patient'),
   upload.single('photo'),
