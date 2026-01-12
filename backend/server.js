@@ -31,7 +31,7 @@ connectDB();
 const allowedOrigins = [
   'http://localhost:5000',
   'http://localhost:5173',
-  'https://your-frontend.vercel.app' // ✅ add frontend URL
+  'https://ayursutrahealth.vercel.app' // ✅ add frontend URL
 ];
 
 app.use(cors({
