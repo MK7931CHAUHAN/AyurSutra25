@@ -6,7 +6,6 @@ const path = require('path');
 const connectDB = require('./config/dbConfig');
 
 const authRoutes = require('./routes/authRoutes');
-const userRoutes = require('./routes/userRoutes');
 const profileRoutes = require("./routes/profileRoutes");
 const patientRoutes = require('./routes/patientRoutes');
 const doctorRoutes = require('./routes/doctorRoutes');
@@ -46,10 +45,14 @@ app.use(cors({
   credentials: true
 }));
 
+// Ignore favicon requests
+app.get("/favicon.ico", (req, res) => res.status(204).end());
+
+// Ignore any favicon.png, favicon.jpg, etc.
+app.get(/^\/favicon\..*$/, (req, res) => res.status(204).end());
 /* ===================== Middlewares ===================== */
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.get("/favicon.ico", (req, res) => res.status(204).end());
 
 /* ===================== Routes ===================== */
 app.get("/", (req, res) => {
@@ -57,7 +60,6 @@ app.get("/", (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
-app.use('/api/users', userRoutes);
 app.use('/api/appointments', appointmentRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/doctors', doctorRoutes);

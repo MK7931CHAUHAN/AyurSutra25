@@ -1,7 +1,7 @@
 // controllers/authController.js
 const crypto = require("crypto");
 const jwt = require("jsonwebtoken");
-const User = require("../models/userModels");
+const User = require('../models/userModels');
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
 /* ======================================================
