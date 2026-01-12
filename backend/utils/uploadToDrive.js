@@ -1,13 +1,14 @@
-const drive = require("../config/googleDrive");
 const fs = require("fs");
+const drive = require("../config/cloudinary");
 
-const FOLDER_ID = "DRIVE_FOLDER_ID"; // Replace with your actual folder ID
+const DRIVE_FOLDER_ID = process.env.GOOGLE_DRIVE_FOLDER_ID || "1ORDXdBWgJjmRbBpf-cPrQhP-D94D7BTZ";
 
-const uploadToDrive = async (file) => {
+module.exports = async (file) => {
   const response = await drive.files.create({
+    supportsAllDrives: true,              // ✅ REQUIRED
     requestBody: {
-      name: file.originalname,
-      parents: [FOLDER_ID],
+      name: file.filename,
+      parents: [DRIVE_FOLDER_ID],
     },
     media: {
       mimeType: file.mimetype,
@@ -16,13 +17,16 @@ const uploadToDrive = async (file) => {
   });
 
   await drive.permissions.create({
+    supportsAllDrives: true,               // ✅ REQUIRED
     fileId: response.data.id,
-    requestBody: { role: "reader", type: "anyone" },
+    requestBody: {
+      role: "reader",
+      type: "anyone",
+    },
   });
 
-  fs.unlinkSync(file.path);
-
-  return `https://drive.google.com/uc?id=${response.data.id}`;
+  return {
+    fileId: response.data.id,
+    viewLink: `https://drive.google.com/uc?id=${response.data.id}`,
+  };
 };
-
-module.exports = uploadToDrive;

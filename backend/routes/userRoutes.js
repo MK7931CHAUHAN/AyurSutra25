@@ -1,21 +1,24 @@
 const express = require("express");
 const router = express.Router();
-const multer = require("multer");
+
+const upload = require("../middleware/upload");
 
 const {
-  registerUser,
-  loginUser,
   getUsers,
+  getUser,
+  updateUser,
+  deleteUser,
 } = require("../controllers/userControllers");
 
 const { uploadUserImage } = require("../controllers/uploadControllers");
 
-const upload = multer({ storage: multer.memoryStorage() });
+// 📌 USER ROUTES
+router.get("/", getUsers);            // GET    /api/users
+router.get("/:id", getUser);          // GET    /api/users/123
+router.put("/:id", updateUser);       // PUT    /api/users/123
+router.delete("/:id", deleteUser);    // DELETE /api/users/123
 
-router.post("/register", registerUser);
-router.post("/login", loginUser);
-router.get("/", getUsers);
-
-router.post("/upload/:id", upload.single("image"), uploadUserImage);
+// 📌 UPLOAD ROUTE
+router.post("/upload-image", upload.single("image"), uploadUserImage);
 
 module.exports = router;
