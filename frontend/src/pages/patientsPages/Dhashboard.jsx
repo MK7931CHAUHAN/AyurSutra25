@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
-import StatsCards from '../../components/patients/StatsCards';
-// import PatientTable from '../../components/patients/PatientTable';
 import TherapySchedule from '../../components/patients/TherapySchedule';
 import QuickActions from '../../components/patients/QuickActions';
 import RecentActivity from '../../components/patients/RecentActivity';
@@ -49,7 +47,6 @@ const DashboardPage = () => {
         </div>
 
         {/* Stats */}
-        <StatsCards />
          <DoctorSlide />
          
         {/* Content */}

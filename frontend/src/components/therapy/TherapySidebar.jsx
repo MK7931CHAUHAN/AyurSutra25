@@ -5,15 +5,14 @@ import {
   FaTachometerAlt,
   FaUserInjured,
   FaUserMd,
-  FaHandHoldingMedical,
   FaCalendarCheck,
-  FaPrescriptionBottleAlt,
   FaChartLine,
   FaSignOutAlt,
   FaBars,
   FaCog,
   FaChevronDown,
   FaCircle,
+  FaTimes
 } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import AOS from "aos";

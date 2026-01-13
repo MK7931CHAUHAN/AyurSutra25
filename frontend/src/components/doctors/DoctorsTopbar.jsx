@@ -471,7 +471,7 @@ const DoctorsTopbar = ({
               <button
                 onClick={() => {
                   setOpen(false);
-                  navigate("/admin/profile");
+                  navigate("/doctors/profile");
                 }}
                 className="w-full px-4 py-2 text-left cursor-pointer
                   hover:bg-gray-100 dark:hover:bg-gray-700 

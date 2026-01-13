@@ -11,6 +11,7 @@ import {
   FaFileMedicalAlt,
   FaCalendarAlt,
   FaCircle,
+  FaTimes
 } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import AOS from "aos";
@@ -41,7 +42,6 @@ const AyurSutraSidebar = ({
       };
     
       const handleNavClick = () => {
-        // Mobile पर sidebar close करें
         if (window.innerWidth < 1024) {
           onCloseMobileMenu();
         }

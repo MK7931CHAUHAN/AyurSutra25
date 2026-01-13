@@ -1,4 +1,4 @@
-// middleware/auth.js
+// middleware/authMiddleware.js
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModels');
 
@@ -9,26 +9,20 @@ const protect = async (req, res, next) => {
   try {
     let token;
 
-    // Check Authorization header
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith('Bearer ')
-    ) {
+    // Get token from Authorization header
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
       token = req.headers.authorization.split(' ')[1];
     }
 
     if (!token) {
       return res.status(401).json({
         success: false,
-        message: 'Unauthorized: Token missing',
+        message: 'Not authorized, token missing'
       });
     }
 
     // Verify token
-    const decoded = jwt.verify(
-      token,
-      process.env.JWT_SECRET || 'your-secret-key-change-in-production'
-    );
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Get user from DB
     const user = await User.findById(decoded.id).select('-password');
@@ -36,7 +30,15 @@ const protect = async (req, res, next) => {
     if (!user) {
       return res.status(401).json({
         success: false,
-        message: 'Unauthorized: User not found',
+        message: 'User not found'
+      });
+    }
+
+    // Check if account is active
+    if (!user.isActive) {
+      return res.status(403).json({
+        success: false,
+        message: 'Account deactivated'
       });
     }
 
@@ -47,7 +49,7 @@ const protect = async (req, res, next) => {
     console.error('Auth middleware error:', error.message);
     return res.status(401).json({
       success: false,
-      message: 'Unauthorized: Invalid or expired token',
+      message: 'Not authorized, invalid or expired token'
     });
   }
 };
@@ -60,14 +62,14 @@ const authorize = (...roles) => {
     if (!req.user) {
       return res.status(401).json({
         success: false,
-        message: 'Unauthorized: No user found',
+        message: 'User not authenticated'
       });
     }
 
     if (!roles.includes(req.user.role)) {
       return res.status(403).json({
         success: false,
-        message: `Forbidden: Role '${req.user.role}' is not allowed`,
+        message: `User role '${req.user.role}' not authorized`
       });
     }
 
@@ -75,7 +77,30 @@ const authorize = (...roles) => {
   };
 };
 
+/* =========================
+   ✅ REQUIRE EMAIL VERIFICATION
+========================= */
+const requireEmailVerification = (req, res, next) => {
+  if (!req.user) {
+    return res.status(401).json({
+      success: false,
+      message: 'User not authenticated'
+    });
+  }
+
+  if (!req.user.isEmailVerified) {
+    return res.status(403).json({
+      success: false,
+      requiresVerification: true,
+      message: 'Please verify your email address'
+    });
+  }
+
+  next();
+};
+
 module.exports = {
   protect,
   authorize,
+  requireEmailVerification
 };

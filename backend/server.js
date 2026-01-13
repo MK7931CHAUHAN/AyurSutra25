@@ -68,7 +68,7 @@ app.use('/api/doctors', doctorRoutes);
 app.use('/api/doctors', metaRoutes);
 app.use('/api/inventory', inventoryRoutes);
 app.use('/api/patients', patientRoutes);
-app.use('/api/therapies', therapyRoutes);
+app.use('/api/therapiest', therapyRoutes);
 app.use('/api/profile', profileRoutes);
 app.use('/api/treatments', treatmentRoutes);
 app.use('/api/reports', reportRoutes);

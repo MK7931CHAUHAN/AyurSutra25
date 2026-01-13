@@ -1,4 +1,3 @@
-// contexts/AuthContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 import api from "../services/api";
 import { toast } from "react-toastify";
@@ -88,33 +87,31 @@ export const AuthProvider = ({ children }) => {
 
   // ---------------- REGISTER ----------------
   const register = async (userData) => {
-    try {
-      console.log('AuthContext Register - Sending:', userData);
-      
-      const res = await api.post("/auth/register", userData);
+  try {
+    console.log('AuthContext Register - Sending:', userData);
 
-      if (res.data.success) {
-        // Save JWT token to localStorage
-        localStorage.setItem("token", res.data.token);
-        
-        // Set axios default header
-        api.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`;
-        
-        // Update user state
-        setUser(res.data.user);
+    const res = await api.post("/auth/register", userData);
 
-        toast.success("Registration successful!");
-        return res.data;
-      } else {
-        throw new Error(res.data.message || 'Registration failed');
-      }
-    } catch (error) {
-      console.error('AuthContext Register Error:', error.response?.data || error.message);
-      const errorMessage = error.response?.data?.message || "Registration failed";
-      toast.error(errorMessage);
-      throw error;
+    if (res.data.success) {
+
+      toast.success("🎉 Registration successful! Please login to continue.");
+
+      // Only return response
+      return res.data;
+    } else {
+      throw new Error(res.data.message || "Registration failed");
     }
-  };
+  } catch (error) {
+    console.error("AuthContext Register Error:", error.response?.data || error.message);
+
+    const errorMessage =
+      error.response?.data?.message || "Registration failed";
+
+    toast.error(errorMessage);
+    throw error;
+  }
+};
+
 
   // ---------------- LOGOUT ----------------
   const logout = () => {
@@ -125,8 +122,84 @@ export const AuthProvider = ({ children }) => {
     navigate("/login");
   };
 
+  // ---------------- FORGOT PASSWORD ----------------
+  const forgotPassword = async (email) => {
+    try {
+      // Make sure your backend expects { email }
+      const response = await api.post("/auth/forgot-password", { email });
+      return response.data;
+    } catch (err) {
+      console.error("Forgot password error:", err);
+      throw err;
+    }
+  };
+
+  // ---------------- VERIFY OTP ----------------
+  const verifyOTP = async (email, otp) => {
+    try {
+      const response = await api.post('/auth/verify-otp', { email, otp });
+      
+      if (response.data.success) {
+        toast.success("OTP verified successfully!");
+        return {
+          ...response.data,
+          resetToken: response.data.resetToken || response.data.token || ''
+        };
+      } else {
+        throw new Error(response.data.message || 'Invalid OTP');
+      }
+    } catch (error) {
+      console.error('Verify OTP error:', error);
+      const errorMessage = error.response?.data?.message || "Invalid OTP. Please try again.";
+      toast.error(errorMessage);
+      throw error;
+    }
+  };
+
+  // ---------------- RESEND OTP ----------------
+  const resendOTP = async (email) => {
+    try {
+      const response = await api.post('/auth/resend-otp', { email });
+      
+      if (response.data.success) {
+        toast.success("New OTP sent to your email!");
+        return response.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to resend OTP');
+      }
+    } catch (error) {
+      console.error('Resend OTP error:', error);
+      const errorMessage = error.response?.data?.message || "Failed to resend OTP. Please try again.";
+      toast.error(errorMessage);
+      throw error;
+    }
+  };
+
   // ---------------- RESET PASSWORD ----------------
-  const resetPassword = async (token, newPassword) => {
+  const resetPassword = async (email, newPassword, resetToken) => {
+    try {
+      const response = await api.post('/auth/reset-password', { 
+        email, 
+        newPassword, 
+        resetToken 
+      });
+      
+      if (response.data.success) {
+        toast.success("Password reset successfully!");
+        return response.data;
+      } else {
+        throw new Error(response.data.message || 'Failed to reset password');
+      }
+    } catch (error) {
+      console.error('Reset password error:', error);
+      const errorMessage = error.response?.data?.message || "Failed to reset password. Please try again.";
+      toast.error(errorMessage);
+      throw error;
+    }
+  };
+
+  // ---------------- OLD RESET PASSWORD (with token only) ----------------
+  const resetPasswordWithToken = async (token, newPassword) => {
     try {
       const res = await api.post(`/auth/reset-password/${token}`, {
         password: newPassword,
@@ -136,18 +209,6 @@ export const AuthProvider = ({ children }) => {
       return res.data;
     } catch (error) {
       toast.error(error.response?.data?.message || "Password reset failed");
-      throw error;
-    }
-  };
-
-  // ---------------- FORGOT PASSWORD ----------------
-  const forgotPassword = async (email) => {
-    try {
-      const res = await api.post("/auth/forgot-password", { email });
-      toast.success(res.data.message || "Password reset email sent!");
-      return res.data;
-    } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to send reset email");
       throw error;
     }
   };
@@ -172,16 +233,52 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // ---------------- UPDATE USER PROFILE ----------------
+  const updateProfile = async (userData) => {
+    try {
+      const res = await api.put("/auth/profile", userData);
+      
+      if (res.data.success) {
+        setUser(res.data.user);
+        toast.success("Profile updated successfully!");
+        return res.data;
+      } else {
+        throw new Error(res.data.message || 'Failed to update profile');
+      }
+    } catch (error) {
+      console.error('Update profile error:', error);
+      const errorMessage = error.response?.data?.message || "Failed to update profile";
+      toast.error(errorMessage);
+      throw error;
+    }
+  };
+
+  // ---------------- CHECK AUTH STATUS ----------------
+  const isAuthenticated = () => {
+    return !!localStorage.getItem("token");
+  };
+
+  // ---------------- GET USER ROLE ----------------
+  const getUserRole = () => {
+    return user?.role || null;
+  };
+
   return (
     <AuthContext.Provider value={{ 
       user, 
       loading, 
+      isAuthenticated,
+      getUserRole,
       login, 
       register, 
       logout, 
-      resetPassword,
       forgotPassword,
-      getCurrentUser
+      verifyOTP,
+      resendOTP,
+      resetPassword,
+      resetPasswordWithToken,
+      getCurrentUser,
+      updateProfile
     }}>
       {children}
     </AuthContext.Provider>

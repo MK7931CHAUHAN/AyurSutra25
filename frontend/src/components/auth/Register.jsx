@@ -275,26 +275,29 @@ const Register = () => {
                         watch('email') ? 'text-emerald-500' : 'text-gray-400'
                       }`} />
                     </div>
-                    <input
-                      id="email"
-                      type="email"
-                      autoComplete="email"
-                      placeholder="Email address"
-                      className={`pl-12 block w-full px-4 py-3 rounded-xl border ${
-                        errors.email 
-                          ? 'border-red-300 bg-red-50 focus:border-red-400 focus:ring-2 focus:ring-red-200' 
-                          : watch('email') 
-                            ? 'border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200'
-                            : 'border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200'
-                      } transition-all duration-300 outline-none`}
-                      {...registerForm('email', {
-                        required: validationMessages.required,
-                        pattern: {
-                          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                          message: validationMessages.email.pattern
-                        }
-                      })}
-                    />
+                 <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="Enter Gmail address"
+                  className={`pl-12 block w-full px-4 py-3 rounded-xl border ${
+                    errors.email
+                      ? 'border-red-300 bg-red-50 focus:border-red-400 focus:ring-2 focus:ring-red-200'
+                      : watch('email')
+                      ? 'border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200'
+                      : 'border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200'
+                  } transition-all duration-300 outline-none`}
+
+                  {...registerForm('email', {
+                    required: validationMessages.required,
+                    pattern: {
+                      /* ✅ ONLY GMAIL.COM */
+                      value: /^[a-zA-Z0-9._%+-]+@gmail\.com$/,
+                      message: "Only Gmail addresses (@gmail.com) are allowed"
+                    }
+                  })}
+                />
+
                     {watch('email') && !errors.email && (
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <FaCheck className="h-5 w-5 text-emerald-500" />
@@ -321,31 +324,57 @@ const Register = () => {
                     <input
                       id="phone"
                       type="tel"
+                      inputMode="numeric"
                       autoComplete="tel"
                       placeholder="Phone number (10 digits)"
+                      maxLength={10}
                       className={`pl-12 block w-full px-4 py-3 rounded-xl border ${
-                        errors.phone 
-                          ? 'border-red-300 bg-red-50 focus:border-red-400 focus:ring-2 focus:ring-red-200' 
-                          : watch('phone') 
-                            ? 'border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200'
-                            : 'border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200'
+                        errors.phone
+                          ? "border-red-300 bg-red-50 focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                          : watch("phone")
+                          ? "border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200"
+                          : "border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200"
                       } transition-all duration-300 outline-none`}
-                      {...registerForm('phone', {
+
+                      /* ✅ Block letters & special chars */
+                      onKeyDown={(e) => {
+                        const allowedKeys = [
+                          "Backspace",
+                          "Delete",
+                          "ArrowLeft",
+                          "ArrowRight",
+                          "Tab",
+                        ];
+
+                        if (!/^[0-9]$/.test(e.key) && !allowedKeys.includes(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+
+                      /* ✅ Clean pasted content */
+                      onInput={(e) => {
+                        let value = e.target.value;
+
+                        // remove non-numeric
+                        value = value.replace(/\D/g, "");
+
+                        // limit 10 digits
+                        value = value.slice(0, 10);
+
+                        e.target.value = value;
+                      }}
+
+                      {...registerForm("phone", {
                         required: validationMessages.required,
                         pattern: {
-                          value: /^\d{10}$/,
-                          message: validationMessages.phone.pattern
+                          /* ✅ STARTS WITH 6–9 AND TOTAL 10 DIGITS */
+                          value: /^[6-9]\d{9}$/,
+                          message: "Phone number must start with 6, 7, 8, or 9",
                         },
-                        minLength: {
-                          value: 10,
-                          message: validationMessages.phone.minLength
-                        },
-                        maxLength: {
-                          value: 10,
-                          message: validationMessages.phone.pattern
-                        }
                       })}
                     />
+
+
                     {watch('phone') && !errors.phone && (
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <FaCheck className="h-5 w-5 text-emerald-500" />
