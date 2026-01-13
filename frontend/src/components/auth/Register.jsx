@@ -96,9 +96,15 @@ const Register = () => {
   // Validation messages configuration
   const validationMessages = {
     required: "This field is required",
-    name: {
-      minLength: "Name must be at least 2 characters",
-      pattern: "Please enter a valid name (letters and spaces only)"
+   name: {
+      minLength: {
+        value: 2,
+        message: "Name must be at least 2 characters",
+      },
+      pattern: {
+        value: /^[A-Za-z]+(?:\s[A-Za-z]+)*$/,
+        message: "Name should contain only letters and spaces",
+      },
     },
     email: {
       pattern: "Please enter a valid email address"
@@ -143,7 +149,7 @@ const Register = () => {
                 <FaGraduationCap className="w-8 h-8 text-white" />
               </div>
              <h3 className="text-3xl font-bold text-gray-900 mb-2 text-center lg:text-center">
-              AYURSUTRA Community
+               AYURSUTRA HealthCare
             </h3>
 
             </div>
@@ -194,54 +200,57 @@ const Register = () => {
                         watch('name') ? 'text-emerald-500' : 'text-gray-400'
                       }`} />
                     </div>
-                    <input
-                      id="name"
-                      type="text"
-                      autoComplete="name"
-                      placeholder="Full name"
-                      className={`pl-12 block w-full px-4 py-3 rounded-xl border ${
-                        errors.name 
-                          ? 'border-red-300 bg-red-50 focus:border-red-400 focus:ring-2 focus:ring-red-200' 
-                          : watch('name') 
-                            ? 'border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200'
-                            : 'border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200'
-                      } transition-all duration-300 outline-none`}
+                  <input
+                    id="name"
+                    type="text"
+                    autoComplete="name"
+                    placeholder="Full name"
+                    className={`pl-12 block w-full px-4 py-3 rounded-xl border ${
+                      errors.name
+                        ? "border-red-300 bg-red-50 focus:border-red-400 focus:ring-2 focus:ring-red-200"
+                        : watch("name")
+                        ? "border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200"
+                        : "border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200"
+                    } transition-all duration-300 outline-none`}
 
-                      onKeyDown={(e) => {
-                        const allowedKeys = [
-                          'Backspace',
-                          'Delete',
-                          'ArrowLeft',
-                          'ArrowRight',
-                          'Home',
-                          'End',
-                          'Tab'
-                        ];
+                    /* ✅ Block invalid keys */
+                    onKeyDown={(e) => {
+                      const allowedKeys = [
+                        "Backspace",
+                        "Delete",
+                        "ArrowLeft",
+                        "ArrowRight",
+                        "Home",
+                        "End",
+                        "Tab",
+                      ];
 
-                        if (
-                          !/^[a-zA-Z\s]$/.test(e.key) &&
-                          !allowedKeys.includes(e.key)
-                        ) {
-                          e.preventDefault();
-                        }
-                      }}
+                      if (
+                        !/^[A-Za-z\s]$/.test(e.key) &&
+                        !allowedKeys.includes(e.key)
+                      ) {
+                        e.preventDefault();
+                      }
+                    }}
 
-                      onChange={(e) => {
-                        e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
-                      }}
+                    /* ✅ Clean paste & typing */
+                    onInput={(e) => {
+                      let value = e.target.value;
 
-                      {...registerForm('name', {
-                        required: validationMessages.required,
-                        minLength: {
-                          value: 2,
-                          message: validationMessages.name.minLength
-                        },
-                        pattern: {
-                          value: /^[A-Za-z\s]+$/,
-                          message: validationMessages.name.pattern
-                        }
-                      })}
-                    />
+                      value = value.replace(/[^A-Za-z\s]/g, ""); // no numbers/special chars
+                      value = value.replace(/\s+/g, " ");       // single space only
+                      value = value.replace(/^\s/, "");         // no leading space
+
+                      e.target.value = value;
+                    }}
+
+                    {...registerForm("name", {
+                      required: validationMessages.required,
+                      minLength: validationMessages.name.minLength,
+                      pattern: validationMessages.name.pattern,
+                    })}
+                  />
+
 
                     {watch('name') && !errors.name && (
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
@@ -544,55 +553,40 @@ const Register = () => {
           </div>
 
           {/* Right Side - Image */}
-        <div className="w-full md:w-1/2 relative overflow-hidden min-h-[300px] md:min-h-full">
-          <div
-            className="h-full w-full relative"
-            style={{
-              backgroundImage:
-                "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80')",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              backgroundRepeat: "no-repeat",
-            }}
-          >
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-black/30"></div>
-
-            {/* Content Overlay */}
-            <div className="
-              absolute inset-0 
-              flex flex-col 
-              justify-center md:justify-end 
-              items-center md:items-start
-              p-6 md:p-12 
-              text-white
-              text-center md:text-left
-            ">
-              <div data-aos="fade-up" data-aos-delay="550">
-                <h3 className="text-2xl md:text-3xl font-bold mb-3">
-                  Welcome to AYURSUTRA
-                </h3>
-
-                <p className="text-white/90 mb-6 max-w-md">
-                  Join thousands of users who are managing their Ayurvedic practice with our comprehensive platform.
-                </p>
-
-                <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto md:mx-0">
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <div className="text-2xl font-bold">500+</div>
-                    <div className="text-sm opacity-90">Clinics</div>
-                  </div>
-
-                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                    <div className="text-2xl font-bold">50K+</div>
-                    <div className="text-sm opacity-90">Patients</div>
+          <div className="w-full md:w-1/2 relative overflow-hidden">
+            <div 
+              className="h-full w-full bg-linear-to-br from-blue-500 to-purple-600 relative"
+              style={{
+                backgroundImage: 'url(\'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80\')',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat'
+              }}
+            >
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/20"></div>
+              
+              {/* Content Overlay */}
+              <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 text-white">
+                <div data-aos="fade-up" data-aos-delay="550">
+                  <h3 className="text-2xl font-bold mb-3">Welcome to AYURSUTRA</h3>
+                  <p className="text-white/90 mb-6">
+                    Join thousands of users who are managing their Ayurvedic practice with our comprehensive platform.
+                  </p>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                      <div className="text-2xl font-bold">500+</div>
+                      <div className="text-sm opacity-90">Clinics</div>
+                    </div>
+                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                      <div className="text-2xl font-bold">50K+</div>
+                      <div className="text-sm opacity-90">Patients</div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-
         </div>
       </div>
 

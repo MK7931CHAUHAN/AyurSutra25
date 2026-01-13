@@ -84,7 +84,7 @@ const AyurSutraSidebar = ({
     <div className={`h-full bg-green-900 ${isCollapsed ? 'w-10' : 'w-64'}`}>
       <aside className={`bg-green-900 text-white h-full flex flex-col transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'}`}>
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-green-700 flex shrink-0">
+        <div className="items-center justify-between p-4 border-b border-green-700 flex shrink-0">
           {!isCollapsed && (
             <div>
               <h1 className="text-xl font-bold flex items-center gap-2">
