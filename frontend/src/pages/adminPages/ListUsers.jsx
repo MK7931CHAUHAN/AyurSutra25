@@ -762,7 +762,6 @@ const Users = () => {
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-gray-800 mb-2">User Management</h1>
-            <p className="text-gray-600">Manage all users in your system</p>
           </div>
           
           <button

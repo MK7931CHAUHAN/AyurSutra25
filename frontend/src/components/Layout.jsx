@@ -164,21 +164,23 @@ const RoleLayout = () => {
   };
 
   const renderTopbar = () => {
-    const topbarProps = {
-      // Mobile: show if sidebar is open, Desktop: show if not collapsed
-      sidebarOpen: isMobile ? sidebarOpen : !sidebarCollapsed,
-      onToggleSidebar: handleToggleSidebar,
-      isMobile,
-    };
-
-    switch (user?.role) {
-      case "admin": return <AdminTopbar {...topbarProps} />;
-      case "doctor": return <DoctorTopbar {...topbarProps} />;
-      case "patient": return <PatientTopbar {...topbarProps} />;
-      case "therapist": return <TherapyTopbar {...topbarProps} />;
-      default: return null;
-    }
+  const topbarProps = {
+    sidebarCollapsed,
+    onToggleSidebar: handleToggleSidebar,     // Desktop collapse
+    onToggleMobileMenu: toggleMobileSidebar, // ✅ Mobile open/close
+    isMobileMenuOpen: sidebarOpen,            // ✅ Mobile state
+    isMobile,
   };
+
+  switch (user?.role) {
+    case "admin": return <AdminTopbar {...topbarProps} />;
+    case "doctor": return <DoctorTopbar {...topbarProps} />;
+    case "patient": return <PatientTopbar {...topbarProps} />;
+    case "therapist": return <TherapyTopbar {...topbarProps} />;
+    default: return null;
+  }
+};
+
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">

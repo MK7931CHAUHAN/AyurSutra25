@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import {
   FaUserCircle, FaBell, FaSignOutAlt, FaUser, FaSearch,
   FaEnvelope, FaExclamationCircle, FaCalendarAlt, FaUserMd, 
-  FaStethoscope, FaBars
+  FaStethoscope, FaBars, FaTimes
 } from "react-icons/fa";
 import { IoChevronDown } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
@@ -12,7 +12,8 @@ import api from "../../services/api";
 const AdminTopbar = ({ 
   sidebarCollapsed, 
   onToggleSidebar, 
-  onToggleMobileMenu 
+  onToggleMobileMenu,
+  isMobileMenuOpen 
 }) => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
@@ -207,31 +208,24 @@ const AdminTopbar = ({
         <button
           onClick={onToggleMobileMenu}
           className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors lg:hidden"
-          aria-label="Open menu"
+          aria-label={isMobileMenuOpen ? "Close menu" : "Open menu"}
         >
-          <FaBars className="text-xl text-gray-700 dark:text-gray-300" />
+          {isMobileMenuOpen ? (
+            <FaTimes className="text-xl text-gray-700 dark:text-gray-300" />
+          ) : (
+            <FaBars className="text-xl text-gray-700 dark:text-gray-300" />
+          )}
         </button>
 
-        {/* Desktop Toggle Button (Always visible on desktop) */}
+        {/* Desktop Toggle Button (Hidden on mobile) */}
         <button
           onClick={onToggleSidebar}
           className="hidden lg:flex p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
-          aria-label="Toggle sidebar"
+          aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
         >
           <FaBars className="text-xl text-gray-700 dark:text-gray-300" />
         </button>
 
-        {/* Logo when Sidebar collapsed */}
-        {sidebarCollapsed && (
-          <div className="hidden lg:flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center">
-              <span className="text-white font-bold">A</span>
-            </div>
-            <span className="text-lg font-bold text-green-700 dark:text-green-400">
-              AyurSutra
-            </span>
-          </div>
-        )}
       </div>
 
       {/* Search Bar */}

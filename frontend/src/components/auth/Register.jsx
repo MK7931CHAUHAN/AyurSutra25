@@ -142,9 +142,10 @@ const Register = () => {
               <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-r from-blue-500 to-purple-500 rounded-full mb-4">
                 <FaGraduationCap className="w-8 h-8 text-white" />
               </div>
-              <h3 className="text-3xl font-bold text-gray-900 mb-2">
-                Join Our AYURSUTRA Community
-              </h3>
+             <h3 className="text-3xl font-bold text-gray-900 mb-2 text-center lg:text-center">
+              AYURSUTRA Community
+            </h3>
+
             </div>
 
             {/* Server Error Display */}
@@ -543,40 +544,55 @@ const Register = () => {
           </div>
 
           {/* Right Side - Image */}
-          <div className="w-full md:w-1/2 relative overflow-hidden">
-            <div 
-              className="h-full w-full bg-linear-to-br from-blue-500 to-purple-600 relative"
-              style={{
-                backgroundImage: 'url(\'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80\')',
-                backgroundSize: 'cover',
-                backgroundPosition: 'center',
-                backgroundRepeat: 'no-repeat'
-              }}
-            >
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/20"></div>
-              
-              {/* Content Overlay */}
-              <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 text-white">
-                <div data-aos="fade-up" data-aos-delay="550">
-                  <h3 className="text-2xl font-bold mb-3">Welcome to AYURSUTRA</h3>
-                  <p className="text-white/90 mb-6">
-                    Join thousands of users who are managing their Ayurvedic practice with our comprehensive platform.
-                  </p>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                      <div className="text-2xl font-bold">500+</div>
-                      <div className="text-sm opacity-90">Clinics</div>
-                    </div>
-                    <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
-                      <div className="text-2xl font-bold">50K+</div>
-                      <div className="text-sm opacity-90">Patients</div>
-                    </div>
+        <div className="w-full md:w-1/2 relative overflow-hidden min-h-[300px] md:min-h-full">
+          <div
+            className="h-full w-full relative"
+            style={{
+              backgroundImage:
+                "url('https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80')",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              backgroundRepeat: "no-repeat",
+            }}
+          >
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-black/20 to-black/30"></div>
+
+            {/* Content Overlay */}
+            <div className="
+              absolute inset-0 
+              flex flex-col 
+              justify-center md:justify-end 
+              items-center md:items-start
+              p-6 md:p-12 
+              text-white
+              text-center md:text-left
+            ">
+              <div data-aos="fade-up" data-aos-delay="550">
+                <h3 className="text-2xl md:text-3xl font-bold mb-3">
+                  Welcome to AYURSUTRA
+                </h3>
+
+                <p className="text-white/90 mb-6 max-w-md">
+                  Join thousands of users who are managing their Ayurvedic practice with our comprehensive platform.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto md:mx-0">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="text-2xl font-bold">500+</div>
+                    <div className="text-sm opacity-90">Clinics</div>
+                  </div>
+
+                  <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+                    <div className="text-2xl font-bold">50K+</div>
+                    <div className="text-sm opacity-90">Patients</div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+        </div>
+
         </div>
       </div>
 
