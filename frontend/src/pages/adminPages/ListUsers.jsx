@@ -278,10 +278,10 @@ const Users = () => {
   // Test Login Function
   const testUserLogin = async (user) => {
     try {
-      const password = prompt(`Enter password for ${user.name} (${user.email}):`, '');
-      if (!password) return;
+      const userPassword = prompt(`Enter password for ${user.name} (${user.email}):`, '');
+      if (!userPassword) return;
       
-      console.log('Testing login for:', user.email, 'with password:', password);
+      console.log('Testing login for:', user.email, 'with password:', userPassword);
       
       const response = await api.post('/auth/login', {
         identifier: user.email,
@@ -538,11 +538,11 @@ const Users = () => {
       .toUpperCase()
       .slice(0, 2);
 
-    const colors = ['bg-gradient-to-br from-emerald-500 to-emerald-700', 
-                    'bg-gradient-to-br from-blue-500 to-blue-700', 
-                    'bg-gradient-to-br from-purple-500 to-purple-700', 
-                    'bg-gradient-to-br from-amber-500 to-amber-700', 
-                    'bg-gradient-to-br from-rose-500 to-rose-700'];
+    const colors = ['bg-linear-to-br from-emerald-500 to-emerald-700', 
+                    'bg-linear-to-br from-blue-500 to-blue-700', 
+                    'bg-linear-to-br from-purple-500 to-purple-700', 
+                    'bg-linear-to-br from-amber-500 to-amber-700', 
+                    'bg-linear-to-br from-rose-500 to-rose-700'];
     const colorIndex = user.name.length % colors.length;
 
     return (
@@ -550,10 +550,6 @@ const Users = () => {
         {initials}
       </div>
     );
-  };
-
-  const navigateToUserPage = (userId) => {
-    navigate(`/users/${userId}`);
   };
 
   // Grid View Component
@@ -750,7 +746,7 @@ const Users = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="flex items-center justify-center min-h-screen bg-linear-to-br from-gray-50 to-gray-100">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-gray-600 font-medium animate-pulse">Loading users...</p>
@@ -760,7 +756,7 @@ const Users = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-6">
+    <div className="min-h-screen bg-linear-to-br from-gray-50 to-gray-100 p-4 md:p-6">
       {/* Header */}
       <div className="mb-6">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-4">
@@ -774,7 +770,7 @@ const Users = () => {
               resetForm();
               setShowModal(true);
             }}
-            className="flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl"
+            className="flex items-center justify-center gap-2 px-6 py-3 bg-linear-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 shadow-lg hover:shadow-xl"
           >
             <FaUserPlus className="w-5 h-5" />
             <span>Add New User</span>
@@ -854,7 +850,7 @@ const Users = () => {
         {error && (
           <div className="mb-6 bg-red-50 border border-red-200 rounded-xl p-4">
             <div className="flex items-center gap-3">
-              <FaExclamationTriangle className="w-5 h-5 text-red-500 flex-shrink-0" />
+              <FaExclamationTriangle className="w-5 h-5 text-red-500 flex shrink-0" />
               <div>
                 <p className="text-red-700 font-medium">API Error</p>
                 <p className="text-red-600 text-sm">{error}</p>
@@ -1214,7 +1210,7 @@ const Users = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-6 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow"
+                    className="px-6 py-2.5 bg-linear-to-r from-blue-600 to-blue-700 text-white font-medium rounded-xl hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow"
                   >
                     {editingUser ? 'Update User' : 'Create User'}
                   </button>
@@ -1354,7 +1350,7 @@ const Users = () => {
                         setShowViewModal(false);
                         handleEdit(selectedUser);
                       }}
-                      className="px-6 py-2.5 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-xl hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2"
+                      className="px-6 py-2.5 bg-linear-to-r from-emerald-600 to-emerald-700 text-white font-medium rounded-xl hover:from-emerald-700 hover:to-emerald-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow flex items-center gap-2"
                     >
                       <FaEdit className="w-4 h-4" />
                       <span>Edit User</span>
@@ -1409,7 +1405,7 @@ const Users = () => {
                   </button>
                   <button
                     onClick={handleDelete}
-                    className="px-6 py-2.5 bg-gradient-to-r from-red-600 to-red-700 text-white font-medium rounded-xl hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow"
+                    className="px-6 py-2.5 bg-linear-to-r from-red-600 to-red-700 text-white font-medium rounded-xl hover:from-red-700 hover:to-red-800 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-1 transition-all duration-200 shadow-sm hover:shadow"
                   >
                     Yes, Delete User
                   </button>

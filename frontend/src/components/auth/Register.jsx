@@ -117,7 +117,7 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 via-white to-purple-50 font-['Inter',sans-serif] overflow-hidden px-4">
+    <div className="min-h-100 flex items-center justify-center bg-linear-to-br from-blue-50 via-white to-purple-50 font-['Inter',sans-serif] overflow-hidden px-4">
       {/* SVG Wave Background */}
       <div className="absolute inset-0 z-0 opacity-20">
         <svg className="w-full h-full" viewBox="0 0 1440 320">
@@ -139,15 +139,12 @@ const Register = () => {
           <div className="w-full md:w-1/2 p-8 md:p-12">
             {/* Card Header */}
             <div className="text-center mb-8">
-              <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full mb-4">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-linear-to-r from-blue-500 to-purple-500 rounded-full mb-4">
                 <FaGraduationCap className="w-8 h-8 text-white" />
               </div>
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <h3 className="text-3xl font-bold text-gray-900 mb-2">
                 Join Our AYURSUTRA Community
-              </h2>
-              <p className="text-gray-600">
-                Start your Ayurvedic journey today
-              </p>
+              </h3>
             </div>
 
             {/* Server Error Display */}
@@ -158,7 +155,7 @@ const Register = () => {
                 data-aos-delay="150"
               >
                 <div className="flex items-start gap-3">
-                  <FaExclamationCircle className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <FaExclamationCircle className="w-5 h-5 mt-0.5 flex shrink-0" />
                   <div>
                     <p className="font-medium mb-1">{errors.root.serverError.message}</p>
                     <p className="text-sm opacity-90">Please check your information and try again.</p>
@@ -175,7 +172,7 @@ const Register = () => {
                 data-aos-delay="150"
               >
                 <div className="flex items-start gap-3">
-                  <FaCheck className="w-5 h-5 mt-0.5 flex-shrink-0" />
+                  <FaCheck className="w-5 h-5 mt-0.5 flex shrink-0" />
                   <div>
                     <p className="font-medium mb-1">All fields look good! ✨</p>
                     <p className="text-sm opacity-90">You're ready to create your account.</p>
@@ -208,6 +205,30 @@ const Register = () => {
                             ? 'border-emerald-300 bg-emerald-50 focus:border-emerald-400 focus:ring-2 focus:ring-emerald-200'
                             : 'border-gray-200 bg-gray-50 focus:border-blue-300 focus:ring-2 focus:ring-blue-200'
                       } transition-all duration-300 outline-none`}
+
+                      onKeyDown={(e) => {
+                        const allowedKeys = [
+                          'Backspace',
+                          'Delete',
+                          'ArrowLeft',
+                          'ArrowRight',
+                          'Home',
+                          'End',
+                          'Tab'
+                        ];
+
+                        if (
+                          !/^[a-zA-Z\s]$/.test(e.key) &&
+                          !allowedKeys.includes(e.key)
+                        ) {
+                          e.preventDefault();
+                        }
+                      }}
+
+                      onChange={(e) => {
+                        e.target.value = e.target.value.replace(/[^A-Za-z\s]/g, '');
+                      }}
+
                       {...registerForm('name', {
                         required: validationMessages.required,
                         minLength: {
@@ -220,6 +241,7 @@ const Register = () => {
                         }
                       })}
                     />
+
                     {watch('name') && !errors.name && (
                       <div className="absolute inset-y-0 right-0 pr-3 flex items-center">
                         <FaCheck className="h-5 w-5 text-emerald-500" />
@@ -476,7 +498,7 @@ const Register = () => {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="group relative w-full py-4 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+                  className="group relative w-full py-4 px-4 rounded-xl bg-linear-to-r from-blue-600 to-purple-600 text-white font-medium shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
                 >
                   <span className="flex items-center justify-center">
                     {isSubmitting ? (
@@ -523,16 +545,16 @@ const Register = () => {
           {/* Right Side - Image */}
           <div className="w-full md:w-1/2 relative overflow-hidden">
             <div 
-              className="h-full w-full bg-gradient-to-br from-blue-500 to-purple-600 relative"
+              className="h-full w-full bg-linear-to-br from-blue-500 to-purple-600 relative"
               style={{
-                backgroundImage: 'url(https://images.unsplash.com/photo-1523050854058-8df90110c9f1?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)',
+                backgroundImage: 'url(\'https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1350&q=80\')',
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
                 backgroundRepeat: 'no-repeat'
               }}
             >
               {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-black/20"></div>
+              <div className="absolute inset-0 bg-linear-to-t from-black/40 via-transparent to-black/20"></div>
               
               {/* Content Overlay */}
               <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-12 text-white">
