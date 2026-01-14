@@ -238,42 +238,38 @@ const Profile = () => {
 
   /* ---------------- HANDLE PHOTO UPLOAD ---------------- */
   const handlePhotoUpload = async (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
+  const file = e.target.files[0];
+  if (!file) return;
 
-    setSelectedFileName(file.name);
+  try {
+    const formData = new FormData();
+    formData.append("photo", file); // MUST match backend
 
-    try {
-      const formData = new FormData();
-      formData.append("photo", file);
+    const res = await api.post(
+      "/profile/upload-image",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
 
-      const res = await api.post("/profile/upload-image", formData);
-      const imageUrl = res.data.cloudinaryUrl;
+    const imageUrl = res.data.imageUrl;
 
-      setFormData((prev) => ({
-        ...prev,
-        photo: imageUrl,
-      }));
+    setFormData((prev) => ({ ...prev, photo: imageUrl }));
+    setUser((prev) => ({ ...prev, photo: imageUrl }));
 
-      setUser((prev) => ({
-        ...prev,
-        photo: imageUrl,
-      }));
-
-      setMessage({
-        text: "Image uploaded successfully",
-        type: "success",
-      });
-
-      e.target.value = "";
-    } catch (error) {
-      console.error(error);
-      setMessage({
-        text: error.response?.data?.message || "Image upload failed",
-        type: "error",
-      });
-    }
-  };
+    setMessage({ text: "Image uploaded successfully", type: "success" });
+    e.target.value = "";
+  } catch (error) {
+    console.error(error.response || error);
+    setMessage({
+      text: error.response?.data?.message || "Image upload failed",
+      type: "error",
+    });
+  }
+};
 
   /* ---------------- UPDATE PROFILE ---------------- */
   const handleSubmit = async (e) => {
@@ -861,7 +857,6 @@ const Profile = () => {
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900">
             Profile <span className="text-blue-600">Settings</span>
           </h1>
-          <p className="text-gray-600 mt-2">Manage your personal information and preferences</p>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" data-aos="fade-up">

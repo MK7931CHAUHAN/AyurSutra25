@@ -31,7 +31,7 @@ const ForgotPassword = () => {
       });
 
       // ✅ ALWAYS go to verify OTP
-      navigate('/verify-otp', {
+      navigate('/verify-reset-token', {
         state: {
           email: data.email
         }

@@ -599,7 +599,7 @@ if (loading) {
               </button>
             </div>
             
-            <div className="space-y-4">
+            {/* <div className="space-y-4">
               {recentPatients.length > 0 ? (
                 recentPatients.map((patient, index) => (
                   <PatientCard key={patient._id || index} patient={patient} />
@@ -609,7 +609,7 @@ if (loading) {
                   <p className="text-gray-500">No recent patients</p>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
 
