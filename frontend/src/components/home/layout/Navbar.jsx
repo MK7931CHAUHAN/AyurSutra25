@@ -1,5 +1,6 @@
 import React from 'react';
 import { Activity, LogIn, Menu, X, Sparkles } from 'lucide-react';
+import { FaLeaf } from 'react-icons/fa';
 
 const Navbar = ({ 
   isMenuOpen, 
@@ -58,16 +59,14 @@ const Navbar = ({
             className="flex items-center space-x-3 cursor-pointer"
           >
             <div className="relative">
-              <div className="h-12 w-12 bg-linear-to-r from-green-600 to-emerald-700 rounded-xl flex items-center justify-center">
-                <Activity className="h-7 w-7 text-white" />
-                <Sparkles className="absolute -top-1 -right-1 h-4 w-4 text-yellow-400" />
-              </div>
+              <div className="inline-flex items-center justify-center p-3 bg-linear-to-r from-emerald-500 to-teal-600 rounded-full shadow-lg mr-3">
+                  <FaLeaf className="h-8 w-8 text-white" />
+                </div>
             </div>
             <div>
               <h1 className="text-2xl font-bold bg-linear-to-r from-green-700 to-emerald-800 bg-clip-text text-transparent">
                 AyurSutra
               </h1>
-              <p className="text-xs text-gray-500">AI-Powered Panchakarma Management</p>
             </div>
           </a>
 

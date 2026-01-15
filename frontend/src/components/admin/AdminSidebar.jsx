@@ -54,21 +54,13 @@ const AyurSutraSidebar = ({
 
   const navItems = [
     { to: "/admin/dashboard", icon: FaTachometerAlt, label: "Dashboard" },
-    // {
-    //   label: "Patients",
-    //   icon: FaUserInjured,
-    //   children: [
-    //     { to: "/admin/patients/add", label: "Add Patient" },
-    //     { to: "/admin/patients/list", label: "Patient List" },
-    //   ],
-    // },
     {
-      label: "Doctors & Therapists",
+      label: "Doctors",
       icon: FaUserMd,
       children: [
-        { to: "/admin/doctors/add", label: "Add Doctor" },
-        { to: "/admin/doctors/list", label: "Doctor List" },
+        { to: "/admin/doctors/view", label: "Doctor" },
         { to: "/admin/doctors/schedule", label: "Schedule" },
+        { to: "/admin/doctors/list", label: "Doctor List" },
         { to: "/admin/doctors/medicine-view", label: "Medicine View" },
       ],
     },

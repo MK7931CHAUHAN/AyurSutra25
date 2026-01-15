@@ -65,11 +65,13 @@ const AdminTopbar = ({
   };
 
   // Load notifications on mount and every 30 seconds
-  useEffect(() => {
-    fetchNotifications();
-    const interval = setInterval(fetchNotifications, 30000);
-    return () => clearInterval(interval);
-  }, []);
+ useEffect(() => {
+  if (!user) return;
+  fetchNotifications();
+  const interval = setInterval(fetchNotifications, 30000);
+  return () => clearInterval(interval);
+}, [user]); // 🔥 KEY FIX
+
 
   const handleLogout = () => {
     logout();

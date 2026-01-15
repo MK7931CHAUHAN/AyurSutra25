@@ -23,91 +23,55 @@ class EmailService {
     });
   }
 
-  async sendVerificationEmail(to, name, verifyLink) {
+  async sendEmail({ to, subject, html }) {
     if (!this.isConnected) return;
 
-    const mailOptions = {
-  from: process.env.SMTP_FROM,
-  to,
-  subject: "Verify your email 🌿",
-  html: `
-    <h2>Hello ${name}</h2>
-    <p>Welcome to <b>AyurSutra</b>!</p>
-    <p>Please verify your email to continue.</p>
-
-    <p>
-      <a 
-        href="${verifyLink}" 
-        style="
-          display:inline-block;
-          padding:10px 20px;
-          background:#16a34a;
-          color:#fff;
-          text-decoration:none;
-          border-radius:6px;
-          font-weight:bold;
-        "
-        target="_blank"
-      >
-        Verify Email
-      </a>
-    </p>
-
-    <p>This link is valid for 24 hours.</p>
-  `
-};
-
-
     try {
-      await this.transporter.sendMail(mailOptions);
-      console.log("📩 Verification email sent to:", to);
+      await this.transporter.sendMail({
+        from: process.env.SMTP_FROM,
+        to,
+        subject,
+        html
+      });
+      console.log("📩 Email sent to:", to);
     } catch (error) {
-      console.error("❌ Failed to send verification email:", error.message);
+      console.error("❌ Failed to send email:", error.message);
     }
   }
 
-  async sendOTPEmail(to, otp, name) {
-    if (!this.isConnected) return;
+  async sendVerificationEmail(to, name, verifyLink) {
+    return this.sendEmail({
+      to,
+      subject: "Verify your email 🌿",
+      html: `
+        <h2>Hello ${name}</h2>
+        <p>Welcome to <b>AyurSutra</b>!</p>
+        <a href="${verifyLink}">Verify Email</a>
+      `
+    });
+  }
 
-    const mailOptions = {
-      from: process.env.SMTP_FROM,
+  async sendOTPEmail(to, otp, name) {
+    return this.sendEmail({
       to,
       subject: "Password Reset OTP 🌿",
       html: `
         <h2>Hello ${name}</h2>
-        <p>Your OTP for password reset is:</p>
-        <h3 style="text-align:center;">${otp}</h3>
-        <p>This OTP is valid for 10 minutes.</p>
+        <h3>${otp}</h3>
+        <p>Valid for 10 minutes</p>
       `
-    };
-
-    try {
-      await this.transporter.sendMail(mailOptions);
-      console.log("📩 OTP email sent to:", to);
-    } catch (error) {
-      console.error("❌ Failed to send OTP email:", error.message);
-    }
+    });
   }
 
   async sendPasswordResetSuccess(to, name) {
-    if (!this.isConnected) return;
-
-    const mailOptions = {
-      from: process.env.SMTP_FROM,
+    return this.sendEmail({
       to,
       subject: "Password Reset Successful 🌿",
       html: `
         <h2>Hello ${name}</h2>
         <p>Your password has been reset successfully.</p>
       `
-    };
-
-    try {
-      await this.transporter.sendMail(mailOptions);
-      console.log("📩 Password reset success email sent to:", to);
-    } catch (error) {
-      console.error("❌ Failed to send reset success email:", error.message);
-    }
+    });
   }
 }
 

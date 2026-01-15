@@ -12,6 +12,7 @@ import {
   FaChevronDown,
   FaCircle,
   FaSpa,
+  FaTimes
 } from "react-icons/fa";
 import { useAuth } from "../../contexts/AuthContext";
 import AOS from "aos";

@@ -65,11 +65,13 @@ const DoctorsTopbar = ({
 
   // Load notifications on mount and every 30 seconds
   useEffect(() => {
+     if (!user) return;
     fetchNotifications();
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [user]);
 
+  
   const handleLogout = () => {
     logout();
     navigate("/login");

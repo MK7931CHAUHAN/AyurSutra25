@@ -7,9 +7,6 @@ import { toast } from 'react-toastify';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 
-// Import health-related image
-// import healthImage from '../../assets/health-login.jpg'; // You'll need to add this image
-
 const Login = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -154,7 +151,7 @@ const Login = () => {
                   <FaUser className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   <input
                     type="text"
-                    placeholder="you@example.com or 9876543210"
+                    placeholder="your@gmail.com or phone number"
                     className={`w-full pl-10 pr-4 py-3 rounded-lg border ${
                       errors.identifier ? 'border-red-500' : 'border-gray-300'
                     } focus:outline-none focus:ring-2 focus:ring-emerald-500`}
@@ -234,7 +231,7 @@ const Login = () => {
                 ) : (
                   <span className="flex items-center justify-center">
                     <FaSignInAlt className="mr-2" />
-                    Sign In to Dashboard
+                    Sign In
                   </span>
                 )}
               </button>
@@ -290,56 +287,37 @@ const Login = () => {
 
           {/* Right Side - Health Image & Content */}
           <div className="w-full lg:w-1/2 bg-linear-to-br from-emerald-600 to-teal-700 relative overflow-hidden">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: `radial-linear(circle at 25px 25px, white 2%, transparent 0%), radial-linear(circle at 75px 75px, white 2%, transparent 0%)`,
-                backgroundSize: '100px 100px'
-              }}></div>
+            <div className="relative min-h-screen flex items-center justify-center overflow-hidden">
+
+              {/* 🔥 Full Page Background Image */}
+              <div
+                className="absolute inset-0 bg-cover bg-center animate-zoomSlow"
+                style={{
+                  backgroundImage:
+                    "url('https://images.unsplash.com/photo-1588776814546-1ffcf47267a5')",
+                }}
+              />
+
+              {/* 🌿 Dark / Gradient Overlay (Readability ke liye) */}
+              <div className="absolute inset-0 bg-linear-to-br from-emerald-900/70 via-black/50 to-emerald-800/70" />
+
+              {/* ✨ Background Pattern (Optional) */}
+              <div className="absolute inset-0 opacity-10">
+                <div
+                  className="absolute inset-0"
+                  style={{
+                    backgroundImage: `
+                      radial-gradient(circle at 25px 25px, white 2%, transparent 0%),
+                      radial-gradient(circle at 75px 75px, white 2%, transparent 0%)
+                    `,
+                    backgroundSize: "100px 100px",
+                  }}
+                />
+              </div>
+
             </div>
 
-            {/* Content Overlay */}
-            <div className="relative z-10 h-full flex flex-col justify-between p-8 md:p-12 text-white">
-              {/* Top Content */}
-              <div className="mb-8">
-                <h3 className="text-2xl font-bold mb-4">Your Health Journey Starts Here</h3>
-              </div>
 
-              {/* Testimonial */}
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-6">
-                <div className="flex items-center mb-4">
-                  <div className="w-12 h-12 rounded-full bg-emerald-400 flex items-center justify-center text-xl mr-4">
-                    DR
-                  </div>
-                  <div>
-                    <h4 className="font-bold">Dr. Priya Sharma</h4>
-                    <p className="text-emerald-100 text-sm">Senior Ayurvedic Practitioner</p>
-                  </div>
-                </div>
-                <p className="italic text-emerald-50">
-                  "AyurSutra has transformed how we deliver personalized Ayurvedic care to our patients."
-                </p>
-              </div>
-
-              {/* Image Placeholder - Replace with actual image */}
-              <div className="mt-8 rounded-xl overflow-hidden shadow-2xl transform hover:scale-[1.02] transition-transform duration-300">
-                <div className="bg-linear-to-r from-emerald-500 to-teal-600 h-64 flex items-center justify-center">
-                  <div className="text-center">
-                    <FaLeaf className="h-16 w-16 text-white mb-4 mx-auto" />
-                    <p className="text-white font-medium">Holistic Health & Wellness</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Bottom Text */}
-              <div className="mt-8 text-center">
-                <p className="text-emerald-100 text-sm">
-                  <span className="font-bold">5000+</span> patients trusted our platform
-                  <span className="mx-2">•</span>
-                  <span className="font-bold">98%</span> satisfaction rate
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>

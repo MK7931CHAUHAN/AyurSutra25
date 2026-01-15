@@ -17,13 +17,12 @@ const UserSchema = new mongoose.Schema(
       unique: true,
       sparse: true,
       validate: {
-        validator: function(v) {
-          // Only validate if email is provided
+        validator: function (v) {
           if (!v) return true;
           return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
         },
-        message: 'Please provide a valid email address'
-      }
+        message: 'Please provide a valid email address',
+      },
     },
 
     phone: {
@@ -33,11 +32,11 @@ const UserSchema = new mongoose.Schema(
       trim: true,
       validate: {
         validator: function (v) {
-          // Only validate if phone is provided
           if (!v) return true;
           return /^[6-9]\d{9}$/.test(v);
         },
-        message: 'Phone number must be a valid 10-digit Indian mobile number starting with 6-9',
+        message:
+          'Phone number must be a valid 10-digit Indian mobile number starting with 6-9',
       },
       set: function (v) {
         return v ? v.replace(/\D/g, '') : v;
@@ -63,6 +62,51 @@ const UserSchema = new mongoose.Schema(
       required: true,
     },
 
+    // 🩺 DOCTOR UNIQUE FIELD (ONLY FOR DOCTOR)
+    medicalRegistrationNumber: {
+      type: String,
+      unique: true,
+      sparse: true,
+      uppercase: true,
+      trim: true,
+      validate: {
+        validator: function (v) {
+          if (this.role !== 'doctor') return true;
+          if (!v) return false;
+          return /^[A-Z0-9-]{6,20}$/.test(v);
+        },
+        message:
+          'Medical Registration Number must be 6–20 characters (A-Z, 0-9, -)',
+      },
+    },
+    doctorLicenseId: {
+      type: String,
+      unique: true,
+      sparse: true,
+      uppercase: true,
+      trim: true,
+      required: function () {
+        return this.role === 'doctor';
+      },
+      match: [/^[A-Z0-9-]{6,20}$/, 'Invalid Doctor License ID'],
+    },
+    
+    // 🔐 ADMIN VERIFICATION (Doctor only)
+    isAdminVerified: {
+      type: Boolean,
+      default: function () {
+        return this.role === 'doctor' ? false : true;
+      },
+    },
+
+    status: {
+      type: String,
+      enum: ['pending', 'active', 'rejected'],
+      default: function () {
+        return this.role === 'doctor' ? 'pending' : 'active';
+      }
+    },
+
     // 🔗 PATIENT PROFILE LINK
     patientProfile: {
       type: mongoose.Schema.Types.ObjectId,
@@ -70,75 +114,81 @@ const UserSchema = new mongoose.Schema(
       sparse: true,
     },
 
-    status: {
-      type: String,
-      enum: ['active', 'inactive', 'suspended'],
-      default: 'active',
-    },
-
-    lastLogin: {
-      type: Date,
-    },
+    lastLogin: Date,
 
     isActive: {
       type: Boolean,
       default: true,
     },
 
+    // 📧 EMAIL VERIFICATION
     isEmailVerified: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
     emailVerificationToken: String,
     emailVerificationExpire: Date,
 
-    // Reset password fields
+    // 📧 ADMIN EMAIL VERIFICATION CODE
+    adminVerificationCode: {
+      type: String,
+      select: false,
+    },
+
+    adminVerificationExpire: {
+      type: Date,
+      select: false,
+    },
+
+    // 🔑 RESET PASSWORD
     resetPasswordOTP: {
       type: String,
       select: false,
     },
-    
+
     resetPasswordOTPExpiry: {
       type: Date,
       select: false,
     },
-    
+
     resetPasswordToken: {
       type: String,
       select: false,
     },
-    
+
     resetPasswordTokenExpiry: {
       type: Date,
       select: false,
-    }
+    },
   },
   {
     timestamps: true,
-    toJSON: { 
+    toJSON: {
       virtuals: true,
-      transform: function(doc, ret) {
+      transform: function (doc, ret) {
         delete ret.password;
         delete ret.resetPasswordOTP;
         delete ret.resetPasswordOTPExpiry;
         delete ret.resetPasswordToken;
         delete ret.resetPasswordTokenExpiry;
+        delete ret.adminVerificationCode;
+        delete ret.adminVerificationExpire;
         return ret;
-      }
-    }
+      },
+    },
   }
 );
 
 /* =========================
-   🔐 PASSWORD HASH - Only hash when password is modified
+   🔐 PASSWORD HASH
 ========================= */
- UserSchema.pre('save', async function () {
+UserSchema.pre('save', async function () {
   if (!this.isModified('password')) return;
 
-   const salt = await bcrypt.genSalt(10);
-   this.password = await bcrypt.hash(this.password, salt);
- });
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
 
 /* =========================
    🔑 PASSWORD MATCH
@@ -150,36 +200,33 @@ UserSchema.methods.comparePassword = async function (enteredPassword) {
 /* =========================
    ✅ CREATE DEFAULT ADMIN
 ========================= */
-UserSchema.statics.createDefaultAdmin = async function() {
+UserSchema.statics.createDefaultAdmin = async function () {
   try {
     const adminEmail = 'mkchauhan9263@gmail.com';
-    const adminExists = await this.findOne({ 
-      email: adminEmail, 
-      role: 'admin' 
+    const adminExists = await this.findOne({
+      email: adminEmail,
+      role: 'admin',
     });
-    
+
     if (!adminExists) {
-      // Hash the password manually for default admin
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash('Mkchauhan@9263', salt);
-      
-      const adminData = {
+
+      await this.create({
         name: 'System Administrator',
         email: adminEmail,
         password: hashedPassword,
         role: 'admin',
-        phone: '',
         isActive: true,
-        status: 'active'
-      };
-      
-      await this.create(adminData);
-      console.log('✅ Default admin created successfully');
-    } else {
-      console.log('✅ Default admin already exists');
+        status: 'active',
+        isEmailVerified: true,
+        isAdminVerified: true,
+      });
+
+      console.log('Default admin created successfully');
     }
   } catch (error) {
-    console.error('❌ Failed to create default admin:', error.message);
+    console.error('Failed to create default admin:', error.message);
   }
 };
 

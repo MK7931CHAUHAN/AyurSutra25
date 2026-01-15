@@ -17,14 +17,26 @@ import '../../index.css';
 
 const Dashboard = () => {
   const navigate = useNavigate();
-  const [recentActivities, setRecentActivities] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('today');
   const [dashboardStats, setDashboardStats] = useState(null);
-  const [recentPatients, setRecentPatients] = useState([]);
-  const [upcomingAppointments, setUpcomingAppointments] = useState([]);
   const [hoveredCard, setHoveredCard] = useState(null); // Added missing state
-  
+
+  const [recentActivities, setRecentActivities] = useState(() => {
+  const cached = sessionStorage.getItem("recentActivities");
+  return cached ? JSON.parse(cached) : [];
+});
+
+  const [recentPatients, setRecentPatients] = useState(() => {
+    const cached = sessionStorage.getItem("recentPatients");
+    return cached ? JSON.parse(cached) : [];
+  });
+
+  const [upcomingAppointments, setUpcomingAppointments] = useState(() => {
+    const cached = sessionStorage.getItem("upcomingAppointments");
+    return cached ? JSON.parse(cached) : [];
+  });
+
   // Enhanced colors with gradients
   const colors = {
     primary: '#10B981',
@@ -99,24 +111,31 @@ const Dashboard = () => {
     }
   ];
 
-  useEffect(() => {
-    fetchDashboardData();
-    const interval = setInterval(fetchDashboardData, 300000);
-    return () => clearInterval(interval);
-  }, [timeRange]);
+useEffect(() => {
+  fetchDashboardData(); // immediate
 
-  const fetchDashboardData = async () => {
-    try {
-      setLoading(true);
+  const interval = setInterval(() => {
+    fetchDashboardData(true); // silent refresh
+  }, 300000);
 
-      // Fetch all dashboard data in parallel
-      const [statsResponse, appointmentsResponse, patientsResponse, upcomingResponse] = await Promise.all([
+  return () => clearInterval(interval);
+}, [timeRange]);
+
+
+  const fetchDashboardData = async (silent = false) => {
+  try {
+    if (!silent && !dashboardStats) setLoading(true);
+
+    const [statsRes, appointmentsRes, patientsRes, upcomingRes] =
+      await Promise.all([
         api.get('/reports/dashboard-stats'),
         api.get('/appointments', {
           params: {
             page: 1,
             limit: 5,
-            date: timeRange === 'today' ? new Date().toISOString().split('T')[0] : undefined,
+            date: timeRange === 'today'
+              ? new Date().toISOString().split('T')[0]
+              : undefined,
           }
         }),
         api.get('/patients', { params: { page: 1, limit: 5 } }),
@@ -130,17 +149,24 @@ const Dashboard = () => {
         })
       ]);
 
-      setDashboardStats(statsResponse.data);
-      setRecentActivities(appointmentsResponse.data.appointments || []);
-      setRecentPatients(patientsResponse.data.patients || []);
-      setUpcomingAppointments(upcomingResponse.data.appointments || []);
+    setDashboardStats(statsRes.data);
+    setRecentActivities(appointmentsRes.data.appointments || []);
+    setRecentPatients(patientsRes.data.patients || []);
+    setUpcomingAppointments(upcomingRes.data.appointments || []);
 
-    } catch (error) {
-      console.error('Error fetching dashboard data:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // 🔥 CACHE SAVE
+    localStorage.setItem("dashboardStats", JSON.stringify(statsRes.data));
+    localStorage.setItem("recentActivities", JSON.stringify(appointmentsRes.data.appointments || []));
+    localStorage.setItem("recentPatients", JSON.stringify(patientsRes.data.patients || []));
+    localStorage.setItem("upcomingAppointments", JSON.stringify(upcomingRes.data.appointments || []));
+
+  } catch (err) {
+    console.error("Dashboard fetch error", err);
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const getCardValue = (cardId) => {
     if (!dashboardStats?.stats) return 0;

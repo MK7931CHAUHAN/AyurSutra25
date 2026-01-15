@@ -18,8 +18,8 @@ import AddPatients from "../pages/adminPages/patients/Add";
 import PatientList from "../pages/adminPages/patients/List";
 
 // Doctor pages
-import AddDoctor from "../pages/adminPages/doctors/Add";
-import DoctorList from "../pages/adminPages/doctors/List";
+import DoctorList from "../pages/adminPages/doctors/DoctorList";
+import DoctorView from "../pages/adminPages/doctors/DoctorViews";
 import DoctorSchedule from "../pages/adminPages/doctors/Schedule";
 import MedicineView from "../pages/adminPages/doctors/MedicineView";
 import MedicineForm from "../pages/doctorPages/MedicineForm";
@@ -42,8 +42,8 @@ const MainContent = () => {
 
       {/* Doctors */}
       <Route path="/doctors/main" element={<DoctorList />} />
-      <Route path="/doctors/add" element={<AddDoctor />} />
       <Route path="/doctors/list" element={<DoctorList />} />
+      <Route path="/doctors/view" element={<DoctorView />} />
       <Route path="/doctors/schedule" element={<DoctorSchedule />} />
       <Route path="/doctors/medicine-view" element={<MedicineView />} />
       <Route path="/doctors/medicine-form" element={<MedicineForm />} />
