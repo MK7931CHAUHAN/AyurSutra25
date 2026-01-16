@@ -18,11 +18,12 @@ const Register = () => {
   const {
     register: registerForm,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid, isDirty },
+    formState: { errors, isSubmitting, isValid, isDirty, isSubmitted },
     watch,
     reset,
     setError,
-    trigger
+    trigger,
+    formState
   } = useForm({
     mode: 'onChange',
     defaultValues: {
@@ -315,7 +316,7 @@ const Register = () => {
 
               {/* Doctor Registration Fields - Only shown when doctor is selected */}
               {selectedRole === 'doctor' && (
-                <div className="space-y-6" data-aos="fade-up" data-aos-delay="220">
+                  <div className="space-y-6" data-aos="fade-up" data-aos-delay="220">
                   {/* Medical Registration Number */}
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -344,6 +345,8 @@ const Register = () => {
                         // Auto-convert to uppercase
                         onInput={(e) => {
                           e.target.value = e.target.value.toUpperCase();
+                          // Trigger validation on input
+                          trigger("medicalRegistrationNumber");
                         }}
                         
                         // Block invalid characters
@@ -367,14 +370,18 @@ const Register = () => {
                           }
                         }}
                         
-                        // Clean pasted content
+                        // Clean pasted content and trigger validation
                         onPaste={(e) => {
                           e.preventDefault();
                           const pastedText = e.clipboardData.getData('text');
                           // Remove all non-allowed characters
                           const cleaned = pastedText.replace(/[^A-Z0-9-]/gi, '').toUpperCase();
                           e.target.value = cleaned;
+                          setTimeout(() => trigger("medicalRegistrationNumber"), 0);
                         }}
+
+                        // Trigger validation on blur
+                        onBlur={() => trigger("medicalRegistrationNumber")}
 
                         {...registerForm("medicalRegistrationNumber", {
                           required: selectedRole === 'doctor' ? validationMessages.medicalRegistrationNumber.required : false,
@@ -391,13 +398,17 @@ const Register = () => {
                         </div>
                       )}
                     </div>
-                    {errors.medicalRegistrationNumber && (
+                    
+                    {/* Show error only when field has been touched or submitted */}
+                    {errors.medicalRegistrationNumber && (medicalRegistrationNumber || formState.isSubmitted) && (
                       <p className="mt-2 text-sm text-red-600 flex items-center gap-2 animate-fade-in">
                         <FaExclamationCircle className="w-3 h-3" />
                         {errors.medicalRegistrationNumber.message}
                       </p>
                     )}
-                    {medicalRegistrationNumber && !errors.medicalRegistrationNumber && (
+                    
+                    {/* Show success message only when field is valid and has content */}
+                    {medicalRegistrationNumber && !errors.medicalRegistrationNumber && medicalRegistrationNumber.length >= 6 && (
                       <p className="mt-2 text-sm text-emerald-600 flex items-center gap-2">
                         <FaCheck className="w-3 h-3" />
                         Valid format ✓
@@ -433,6 +444,7 @@ const Register = () => {
                         // Auto-convert to uppercase
                         onInput={(e) => {
                           e.target.value = e.target.value.toUpperCase();
+                          trigger("doctorLicenseId");
                         }}
                         
                         // Block invalid characters
@@ -456,14 +468,18 @@ const Register = () => {
                           }
                         }}
                         
-                        // Clean pasted content
+                        // Clean pasted content and trigger validation
                         onPaste={(e) => {
                           e.preventDefault();
                           const pastedText = e.clipboardData.getData('text');
                           // Remove all non-allowed characters
                           const cleaned = pastedText.replace(/[^A-Z0-9-]/gi, '').toUpperCase();
                           e.target.value = cleaned;
+                          setTimeout(() => trigger("doctorLicenseId"), 0);
                         }}
+
+                        // Trigger validation on blur
+                        onBlur={() => trigger("doctorLicenseId")}
 
                         {...registerForm("doctorLicenseId", {
                           required: selectedRole === 'doctor' ? validationMessages.doctorLicenseId.required : false,
@@ -480,13 +496,17 @@ const Register = () => {
                         </div>
                       )}
                     </div>
-                    {errors.doctorLicenseId && (
+                    
+                    {/* Show error only when field has content or form submitted */}
+                    {errors.doctorLicenseId && (doctorLicenseId || formState.isSubmitted) && (
                       <p className="mt-2 text-sm text-red-600 flex items-center gap-2 animate-fade-in">
                         <FaExclamationCircle className="w-3 h-3" />
                         {errors.doctorLicenseId.message}
                       </p>
                     )}
-                    {doctorLicenseId && !errors.doctorLicenseId && (
+                    
+                    {/* Show success message only when field is valid and has content */}
+                    {doctorLicenseId && !errors.doctorLicenseId && doctorLicenseId.length >= 6 && (
                       <p className="mt-2 text-sm text-emerald-600 flex items-center gap-2">
                         <FaCheck className="w-3 h-3" />
                         Valid format ✓
@@ -507,6 +527,7 @@ const Register = () => {
                     </div>
                   </div>
                 </div>
+
               )}
 
               {/* Common Registration Fields */}
@@ -829,24 +850,40 @@ const Register = () => {
                 data-aos="fade-up"
                 data-aos-delay="300"
               >
-                <p className="flex items-start gap-2">
+                <div className="flex items-start gap-2">
                   <input
                     type="checkbox"
                     id="terms"
                     required
-                    className="mt-1 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                    className={`mt-1 rounded border ${
+                      errors.terms 
+                        ? "border-red-300 bg-red-50" 
+                        : "border-gray-300"
+                    } text-blue-600 focus:ring-blue-500 transition-colors duration-200`}
+                    // Use React Hook Form's register
+                    {...registerForm("terms", {
+                      required: "You must agree to the terms and conditions to register"
+                    })}
                   />
-                  <label htmlFor="terms" className="leading-tight">
+                  <label htmlFor="terms" className="leading-tight cursor-pointer">
                     I agree to the{' '}
-                    <Link to="/terms" className="text-blue-600 hover:text-blue-500 font-medium">
+                    <Link to="/terms" className="text-blue-600 hover:text-blue-500 font-medium underline underline-offset-2">
                       Terms of Service
                     </Link>{' '}
                     and{' '}
-                    <Link to="/privacy" className="text-blue-600 hover:text-blue-500 font-medium">
+                    <Link to="/privacy" className="text-blue-600 hover:text-blue-500 font-medium underline underline-offset-2">
                       Privacy Policy
                     </Link>
                   </label>
-                </p>
+                </div>
+                
+                {/* Show error only when form is submitted or field is dirty */}
+                {errors.terms && (formState.isSubmitted || formState.dirtyFields.terms) && (
+                  <p className="mt-2 text-sm text-red-600 flex items-center gap-2 animate-fade-in">
+                    <FaExclamationCircle className="w-3 h-3 flex shrink-0" />
+                    {errors.terms.message}
+                  </p>
+                )}
               </div>
 
               {/* Submit Button */}
